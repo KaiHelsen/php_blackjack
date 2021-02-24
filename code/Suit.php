@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 class Suit
 {
-    const TYPE_SPADE = 'Spade';
-    const TYPE_HEART = 'Heart';
-    const TYPE_DIAMOND = 'Diamond';
-    const TYPE_CLUB = 'Club';
+    private const TYPE_SPADE = 'Spade';
+    private const TYPE_HEART = 'Heart';
+    private const TYPE_DIAMOND = 'Diamond';
+    private const TYPE_CLUB = 'Club';
 
     private const CHAR_SPADE = 127136;
     private const CHAR_HEART = 127152;
@@ -16,20 +16,28 @@ class Suit
     /** @var string */
     private string $name;
 
-    private function __construct(string $name) {
+    private function __construct(string $name)
+    {
         $this->name = $name;
     }
 
-    static function SPADE() {
+    public static function SPADE(): Suit
+    {
         return new Suit(self::TYPE_SPADE);
     }
-    static function HEART() {
+
+    public static function HEART(): Suit
+    {
         return new Suit(self::TYPE_HEART);
     }
-    static function DIAMOND() {
+
+    public static function DIAMOND(): Suit
+    {
         return new Suit(self::TYPE_DIAMOND);
     }
-    static function CLUB() {
+
+    public static function CLUB(): Suit
+    {
         return new Suit(self::TYPE_CLUB);
     }
 
@@ -38,14 +46,15 @@ class Suit
         return $this->name;
     }
 
-    public function getColor() : string
+    public function getColor(): string
     {
         return in_array($this->name, [self::TYPE_HEART, self::TYPE_DIAMOND]) ? 'red' : 'black';
     }
 
-    public function getStartValue() : int
+    public function getStartValue(): int
     {
-        switch($this->name) {
+        switch ($this->name)
+        {
             case self::TYPE_SPADE;
                 return self::CHAR_SPADE;
             case self::TYPE_CLUB;

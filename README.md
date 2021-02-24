@@ -69,25 +69,25 @@ __TL;DR: Never use public properties, make getters!__
     -[x] Create a new [`deck` object](code/Deck.php) (code has already been written for you!).
     -[x] Shuffle the cards with `shuffle` method on `deck`.
 1. In the [constructor](https://www.php.net/manual/en/language.oop5.decon.php) of the `Player` class;
-    -[ ] Make it require the `Deck` object.
-    -[ ] Pass this `Deck` from the `Blackjack` constructor.
-    -[ ] Now draw 2 cards for the player. You have to use an existing method for this from the Deck class.
+    -[x] Make it require the `Deck` object.
+    -[x] Pass this `Deck` from the `Blackjack` constructor.
+    -[x] Now draw 2 cards for the player. You have to use an existing method for this from the Deck class.
 1. Go back to the `Player` class and add the following logic in your empty methods:
-    -[ ] `getScore` loops over all the cards and return the total value of that player.
-    -[ ] `hasLost` will return the bool of the lost property.
-    -[ ] `hit` should add a card to the player. If this brings him above 21, set `lost` property to `true`. To count his score use the method `getScore` you wrote earlier. This method should require the `$deck` variable as an argument from outside, to draw the card.
-        -[ ] (optional) For bonus points make the number 21 a class constant: this is a [magical value](https://stackoverflow.com/questions/47882/what-is-a-magic-number-and-why-is-it-bad) we want to avoid.
-    -[ ] `surrender` should make you surrender the game. (Dealer wins.)
+    -[x] `getScore` loops over all the cards and return the total value of that player.
+    -[x] `hasLost` will return the bool of the lost property.
+    -[x] `hit` should add a card to the player. If this brings him above 21, set `lost` property to `true`. To count his score use the method `getScore` you wrote earlier. This method should require the `$deck` variable as an argument from outside, to draw the card.
+        -[x] (optional) For bonus points make the number 21 a class constant: this is a [magical value](https://stackoverflow.com/questions/47882/what-is-a-magic-number-and-why-is-it-bad) we want to avoid.
+    -[x] `surrender` should make you surrender the game. (Dealer wins.)
             This sets the property `lost` in the `player` instance to true.
-    -[ ] `stand` does not have a method in the player class but will instead call hit on the `dealer` instance. (you have to do nothing here)
+    -[x] `stand` does not have a method in the player class but will instead call hit on the `dealer` instance. (you have to do nothing here)
 
 #### Creating the index.php  file
 1. Create an index.php file with the following code:
-   -[ ] Require all the files with the classes you already created. Ideally you want a seperate file for each class.
-   -[ ] Start the PHP session
-   -[ ] If the session does not have a `Blackjack` variable yet: 
-        -[ ] Create a new `Blackjack` object.
-        -[ ] Put the `Blackjack` object in the session
+   -[x] Require all the files with the classes you already created. Ideally you want a seperate file for each class.
+   -[x] Start the PHP session
+   -[x] If the session does not have a `Blackjack` variable yet: 
+        -[x] Create a new `Blackjack` object.
+        -[x] Put the `Blackjack` object in the session
 1. Use buttons or links to send to the `index.php` page what the player's action is. (i.e. hit/stand/surrender)
     
 #### Take a moment to enjoy the view
@@ -97,23 +97,23 @@ Everything from the player is now done! Job well done!
 #### The dealer
 So far we are assuming the player and dealer play with the same rules, hence they share a class. There is of course an important difference: the dealer does keep playing with the function `hit` until he has at least 15.
 
-1. -[ ] To change this behavior, we have are going [extend](https://www.php.net/manual/en/language.oop5.inheritance.php) the `player` class and extend it to a newly created `dealer` class. 
+1. -[x] To change this behavior, we have are going [extend](https://www.php.net/manual/en/language.oop5.inheritance.php) the `player` class and extend it to a newly created `dealer` class. 
 
-1. -[ ] Change the `Blackjack` class to create a new `dealer` object instead of a `player` object for the property of the dealer. 
+1. -[x] Change the `Blackjack` class to create a new `dealer` object instead of a `player` object for the property of the dealer. 
 
-1. -[ ] Now create a `hit` function that keeps drawing cards until the dealer has at least 15 points. The tricky part is that we also need the `lost` check we already had in the `hit` function of the player. We could just copy the code but duplicated code is never the solution, instead you can use the following code to call the old `hit` function:
+1. -[x] Now create a `hit` function that keeps drawing cards until the dealer has at least 15 points. The tricky part is that we also need the `lost` check we already had in the `hit` function of the player. We could just copy the code but duplicated code is never the solution, instead you can use the following code to call the old `hit` function:
 
 ```parent::hit();```
 
 #### Final push
 All classes are ready, now you just need to write some minimal glue in the `index.php`. The final result should be the following:
 
-1. -[ ] When you the **hit** button call `hit` on player, then check the lost status of the player.
+1. -[x] When you the **hit** button call `hit` on player, then check the lost status of the player.
     You will need to pass a `Deck` variable to this function, you can use the `Blackjack::getDeck()` method for this.
-1. -[ ] When you the **stand** button call `hit` on dealer, then check the lost status of the dealer. If he is not lost, compare scores to set the winner (If equal the dealer wins). 
-1. -[ ] **Surrender**: the dealer auto wins.
-1. -[ ] Always display on the page the scores of both players. If you have a winner, display it.
-1. -[ ] End of the game: destroy the current `blackjack` variable so the game restarts.
+1. -[x] When you the **stand** button call `hit` on dealer, then check the lost status of the dealer. If he is not lost, compare scores to set the winner (If equal the dealer wins). 
+1. -[x] **Surrender**: the dealer auto wins.
+1. -[x] Always display on the page the scores of both players. If you have a winner, display it.
+1. -[x] End of the game: destroy the current `blackjack` variable so the game restarts.
     
 # Nice to have
 - [ ] Implement a betting system

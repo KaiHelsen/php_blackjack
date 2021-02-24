@@ -1,19 +1,20 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class Blackjack
 {
     private Player $player;
-    private Player $dealer;
+    private Dealer $dealer;
     private Deck $deck;
 
     public function __construct()
     {
         $this->deck = new Deck();
-        $this->player = new Player($this->deck);
-        $this->dealer = new Player($this->deck);
         $this->deck->shuffle();
+        $this->player = new Player($this->deck);
+        $this->dealer = new Dealer($this->deck);
     }
+
     /**
      * @return Player
      */
@@ -23,9 +24,9 @@ class Blackjack
     }
 
     /**
-     * @return Player
+     * @return Dealer
      */
-    public function getDealer(): Player
+    public function getDealer(): Dealer
     {
         return $this->dealer;
     }
@@ -37,6 +38,5 @@ class Blackjack
     {
         return $this->deck;
     }
-
 
 }

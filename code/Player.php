@@ -1,12 +1,11 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
-use JetBrains\PhpStorm\Pure;
-
+//require_once('Deck.php');
 class Player
 {
+    private const BLACKJACK = 21;
 
-    private CONST BLACKJACK = 21;
     private bool $lost = false;
     private array $cards;
 
@@ -14,32 +13,44 @@ class Player
     {
         $this->cards = [];
 
-        require('Deck.php');
-        for($i = 0; $i < 2; $i++)
+        for ($i = 0; $i < 2; $i++)
         {
-            $this->cards[$i] = $deck->drawCard();
+            array_push($this->cards, $deck->drawCard());
         }
     }
 
-    public function hit(Deck $deck) : void
+    /**
+     * draws a new card and adds it to the player's hand
+     * @param Deck $deck
+     */
+    public function hit(Deck $deck): void
     {
         array_push($this->cards, $deck->drawCard());
 
-        if($this->getScore() > self::BLACKJACK)
+        if ($this->getScore() > self::BLACKJACK)
         {
             $this->lost = true;
         }
     }
-    public function surrender() : void
+
+    /**
+     * give up and lose the game
+     */
+    public function surrender(): void
     {
         $this->lost = true;
     }
-    #[Pure] public function getScore() : int
+
+    /**
+     * return total score of the cards in the player's hand
+     * @return int
+     */
+    public function getScore(): int
     {
         $totalValue = 0;
-        foreach($this->cards AS $card)
+        foreach ($this->cards as $card)
         {
-            if($card instanceof Card)
+            if ($card instanceof Card)
             {
                 $totalValue += $card->getValue();
             }
@@ -50,11 +61,31 @@ class Player
         }
         return $totalValue;
     }
-    public function hasLost() : bool
+
+    /**
+     * returns whether the player has won or lost
+     * @return bool
+     */
+    public function hasLost(): bool
     {
         return $this->lost;
     }
-    public function stand() : void{
 
+    /**
+     * TODO: figure this one out in a bit I guess
+     */
+    public function stand(): void
+    {
+
+    }
+
+    public function getCardFromHand(int $key): ?Card
+    {
+        return $this->cards[$key];
+    }
+
+    public function getHandCount(): int
+    {
+        return count($this->cards);
     }
 }
