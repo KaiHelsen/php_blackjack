@@ -125,17 +125,16 @@ elseif ($player->hasLost() || ($roundOver && !$dealer->hasLost() && $dealer->get
     $lossMessage = "player lost this round";
     $roundOver = endgame($currentBet, false);
 }
-elseif ($dealer->hasLost() || ($roundOver && $dealer->getScore() < $player->getScore() ))
+elseif ($dealer->hasLost() || $player->getScore() === Player::BLACKJACK || ($roundOver && $dealer->getScore() < $player->getScore() ))
 {
     //IF DEALER LOST BECAUSE THEY WENT TOO HIGH
+    //OR
+    //PLAYER HAS 21
     //OR
     //ROUND IS OVER AND DEALER HAS A LOWER SCORE TO PLAYER
     $lossMessage = "Player has won this round!";
     $roundOver = endgame($currentBet * 2);
 }
-
-
-//go through win/loss conditions
 
 //reset session
 //session_unset();

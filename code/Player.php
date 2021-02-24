@@ -4,7 +4,7 @@ declare(strict_types=1);
 //require_once('Deck.php');
 class Player
 {
-    private const BLACKJACK = 21;
+    public const BLACKJACK = 21;
 
     private bool $lost = false;
     private bool $hasBlackjack;
