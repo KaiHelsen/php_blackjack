@@ -23,7 +23,6 @@ const MIN_CHIP_BET = 5;
 session_start();
 
 //if there isn't a blackjack game yet, create one
-
 $initSession = static function (): Blackjack
 {
     if (!isset($_SESSION[GAME_SESSION]))
@@ -43,6 +42,20 @@ $player = $game->getPlayer();
 $dealer = $game->getDealer();
 $currentBet = 0;
 
+function endGame(int $betValue, bool $playerWon = true): bool
+{
+    if ($playerWon)
+    {
+        $_SESSION[PLAYER_CHIPS] += $betValue;
+    }
+    else
+    {
+        $_SESSION[PLAYER_CHIPS] -= $betValue;
+    }
+    unset($_SESSION[GAME_SESSION]);
+    return true;
+}
+
 //var_DUMP($_SESSION[GAME_SESSION]->getPlayer()->getHand());
 
 $playerInput = "";
@@ -53,73 +66,25 @@ $roundOver = false;
 if (isset($_POST["action"]))
 {
     $playerInput = htmlspecialchars($_POST["action"], ENT_NOQUOTES, 'UTF-8');
-    $currentBet = min($_SESSION[PLAYER_CHIPS],max(MIN_CHIP_BET,(int)$_POST["playerBet"]));
-//    echo $currentBet;
-}
+    $currentBet = min($_SESSION[PLAYER_CHIPS], max(MIN_CHIP_BET, (int)$_POST["playerBet"]));
 
-if ($player->getBlackjack() && $dealer->getBlackjack())
-{
-    //tie
-    $lossMessage = "TWO BLACKJACKS! It's a tie!";
-    $roundOver = true;
-    $_SESSION[PLAYER_CHIPS] += $currentBet;
-    unset($_SESSION[GAME_SESSION]);
-}
-elseif ($player->getBlackjack())
-{
-    //player wins
-    $lossMessage = "BLACKJACK! Player has won this round!";
-    $_SESSION[PLAYER_CHIPS] += ($currentBet * 2) + 10;
-    $roundOver = true;
-    unset($_SESSION[GAME_SESSION]);
-}
-elseif ($dealer->getBlackjack())
-{
-    //dealer wins
-    $lossMessage = "BLACKJACK! Player has lost this round";
-    $_SESSION[PLAYER_CHIPS] -= (5 + $currentBet);
-    $roundOver = true;
-    unset($_SESSION[GAME_SESSION]);
-}
-else
-{
     switch ($playerInput)
     {
         case(HIT_ME):
             //hit player with a fresh card
             $player->hit($deck);
-            if ($player->hasLost())
-            {
-                $lossMessage = "player has lost this round";
-                $_SESSION[PLAYER_CHIPS] -= $currentBet;
-                $roundOver = true;
-                unset($_SESSION[GAME_SESSION]);
-            }
             break;
         case(STAND):
             //dealer takes all the cards they want
             $dealer->hit($deck);
-
-            if (!$dealer->hasLost() && $dealer->getScore() >= $player->getScore())
-            {
-                $lossMessage = "player has lost this round";
-                $_SESSION[PLAYER_CHIPS] -= $currentBet;
-                $roundOver = true;
-                unset($_SESSION[GAME_SESSION]);
-            }
-            else
-            {
-                $lossMessage = "player has won this round!";
-                $_SESSION[PLAYER_CHIPS] += $currentBet * 2;
-                $roundOver = true;
-                unset($_SESSION[GAME_SESSION]);
-            }
+            $roundOver = true;
             break;
         case (SURRENDER):
             //player gives up
             $player->surrender();
             unset($_SESSION[GAME_SESSION]);
-//
+
+            //initialize new session
             $game = $initSession();
             $deck = $game->getDeck();
             $player = $game->getPlayer();
@@ -130,6 +95,47 @@ else
         default:
     }
 }
+
+if ($player->getBlackjack() && $dealer->getBlackjack())
+{
+    //IF PLAYER AND DEALER HAVE BLACKJACK
+    //tie
+    $lossMessage = "TWO BLACKJACKS! It's a tie!";
+    $roundOver = endGame($currentBet);
+}
+elseif ($player->getBlackjack())
+{
+    //IF PLAYER HAS BLACKJACK
+    //player wins
+    $lossMessage = "BLACKJACK! Player has won this round!";
+    $roundOver = endGame(($currentBet * 2) + 10);
+}
+elseif ($dealer->getBlackjack())
+{
+    //IF DEALER HAS BLACKJACK
+    //dealer wins
+    $lossMessage = "BLACKJACK! Player has lost this round";
+    $roundOver = endgame(($currentBet + 5), false);
+}
+elseif ($player->hasLost() || ($roundOver && !$dealer->hasLost() && $dealer->getScore() >= $player->getScore() ))
+{
+    //IF PLAYER HAS LOST BECAUSE THEY WENT TOO HIGH
+    //OR
+    //ROUND IS OVER AND DEALER HAS A HIGHER OR EQUAL SCORE TO PLAYER
+    $lossMessage = "player lost this round";
+    $roundOver = endgame($currentBet, false);
+}
+elseif ($dealer->hasLost() || ($roundOver && !$player->hasLost() && $dealer->getScore() < $player->getScore() ))
+{
+    //IF DEALER LOST BECAUSE THEY WENT TOO HIGH
+    //OR
+    //ROUND IS OVER AND DEALER HAS A LOWER SCORE TO PLAYER
+    $lossMessage = "Player has won this round!";
+    $roundOver = endgame($currentBet * 2);
+}
+
+
+//go through win/loss conditions
 
 //reset session
 //session_unset();
@@ -152,15 +158,16 @@ else
     </button>
     <button type="submit" name="action" value="<?php echo SURRENDER; ?>">Restart</button>
     <div>
-        <label>How much do you want to bet? You have <b><?php echo $_SESSION[PLAYER_CHIPS]; ?></b> chips to bet with</label>
+        <label>How much do you want to bet? You have <b><?php echo $_SESSION[PLAYER_CHIPS]; ?></b> chips to bet
+            with</label>
     </div>
-    <input type="number" name="playerBet" min="<?php echo MIN_CHIP_BET; ?>" max="$_SESSION[PLAYER_CHIPS]" value="<?php echo $currentBet; ?>">
+    <input type="number" name="playerBet" min="<?php echo MIN_CHIP_BET; ?>" max="$_SESSION[PLAYER_CHIPS]"
+           value="<?php echo $currentBet; ?>">
 
 </form>
 
 <div>
     <div>Player hand: <?php echo $player->getScore(); ?></div>
-
     <?php for ($i = 0; $i < $player->getHandCount(); $i++):
         echo $player->getCardFromHand($i)->getUnicodeCharacter(true);
     endfor; ?>

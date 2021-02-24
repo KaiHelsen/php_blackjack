@@ -4,10 +4,6 @@
 class Dealer extends Player
 {
     private const MIN_SCORE = 15;
-    public function __construct(Deck $deck)
-    {
-        parent::__construct($deck);
-    }
 
     public function hit(Deck $deck): void
     {
@@ -17,5 +13,7 @@ class Dealer extends Player
         }
 //        echo("done!");
     }
+
+
 
 }

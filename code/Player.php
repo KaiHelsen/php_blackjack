@@ -16,7 +16,7 @@ class Player
 
         for ($i = 0; $i < 2; $i++)
         {
-            array_push($this->cards, $deck->drawCard());
+            self::hit($deck);
         }
 
         $this->hasBlackjack = ($this->getScore() === self::BLACKJACK);
