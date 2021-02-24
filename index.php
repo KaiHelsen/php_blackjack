@@ -62,7 +62,7 @@ $playerInput = "";
 $roundOver = false;
 
 //get player action
-
+//act accordingly
 if (isset($_POST["action"]))
 {
     $playerInput = htmlspecialchars($_POST["action"], ENT_NOQUOTES, 'UTF-8');
@@ -92,10 +92,10 @@ if (isset($_POST["action"]))
 
             header("index.php");
             break;
-        default:
     }
 }
 
+//CHECK GAME WIN CONDITIONS
 if ($player->getBlackjack() && $dealer->getBlackjack())
 {
     //IF PLAYER AND DEALER HAVE BLACKJACK
@@ -125,7 +125,7 @@ elseif ($player->hasLost() || ($roundOver && !$dealer->hasLost() && $dealer->get
     $lossMessage = "player lost this round";
     $roundOver = endgame($currentBet, false);
 }
-elseif ($dealer->hasLost() || ($roundOver && !$player->hasLost() && $dealer->getScore() < $player->getScore() ))
+elseif ($dealer->hasLost() || ($roundOver && $dealer->getScore() < $player->getScore() ))
 {
     //IF DEALER LOST BECAUSE THEY WENT TOO HIGH
     //OR
