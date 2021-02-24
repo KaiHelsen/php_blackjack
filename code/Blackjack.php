@@ -38,5 +38,4 @@ class Blackjack
     {
         return $this->deck;
     }
-
 }

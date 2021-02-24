@@ -113,7 +113,7 @@ All classes are ready, now you just need to write some minimal glue in the `inde
 1. -[x] When you the **stand** button call `hit` on dealer, then check the lost status of the dealer. If he is not lost, compare scores to set the winner (If equal the dealer wins). 
 1. -[x] **Surrender**: the dealer auto wins.
 1. -[x] Always display on the page the scores of both players. If you have a winner, display it.
-1. -[x] End of the game: destroy the current `blackjack` variable so the game restarts.
+1. -[ ] End of the game: destroy the current `blackjack` variable so the game restarts.
     
 # Nice to have
 - [ ] Implement a betting system

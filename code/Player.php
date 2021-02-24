@@ -7,6 +7,7 @@ class Player
     private const BLACKJACK = 21;
 
     private bool $lost = false;
+    private bool $hasBlackjack;
     private array $cards;
 
     public function __construct(Deck $deck)
@@ -17,6 +18,8 @@ class Player
         {
             array_push($this->cards, $deck->drawCard());
         }
+
+        $this->hasBlackjack = ($this->getScore() === self::BLACKJACK);
     }
 
     /**
@@ -87,5 +90,10 @@ class Player
     public function getHandCount(): int
     {
         return count($this->cards);
+    }
+
+    public function getBlackjack() : bool
+    {
+        return $this->hasBlackjack;
     }
 }
